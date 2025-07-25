@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Koffiecafé – Publiciteit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --clr-bg: #2c0e0e;
+      --clr-bg-accent: #3c1a1a;
+      --clr-primary: #913737;
+      --clr-primary-light: #c94f4f;
+      --clr-text: #f9f9f9;
+      --clr-muted: #d3c5c5;
+      --clr-card-bg: #4a2323;
+      --radius: 1rem;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background-color: var(--clr-bg);
+      color: var(--clr-text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--clr-bg-accent);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      color: var(--clr-primary-light);
+    }
+
+    .menu-item {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--clr-text);
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background-color: var(--clr-primary);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .form-section {
+      background-color: var(--clr-card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      max-width: 600px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: var(--radius);
+      border: none;
+      background: #1f0f0f;
+      color: var(--clr-text);
+    }
+
+    button {
+      background-color: var(--clr-primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      margin-top: 2rem;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--clr-primary-light);
+    }
+
+    #status {
+      margin-top: 1rem;
+      color: var(--clr-muted);
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>Koffiecafé</h2>
+    <div class="menu-item" onclick="location.href='paneel.html'">Publiciteit</div>
+    <div class="menu-item" onclick="location.href='tellen.html'">Tellen</div>
+  </aside>
+
+  <main class="main-content">
+    <div class="form-section">
+      <h1>Publiciteit Instellingen</h1>
+
+      <label for="guildId">Discord Server ID:</label>
+      <input type="text" id="guildId" placeholder="bv. 123456789012345678">
+
+      <label for="serverType">Servertype:</label>
+      <select id="serverType">
+        <option value="public">Public</option>
+        <option value="main">Main</option>
+        <option value="test">Test</option>
+      </select>
+
+      <button onclick="saveSettings()">Opslaan</button>
+      <p id="status"></p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDGH4Z_VPk4NiysBgjcx6UHyL2DpirL1ro",
+      authDomain: "koffie-server.firebaseapp.com",
+      projectId: "koffie-server",
+      storageBucket: "koffie-server.firebasestorage.app",
+      messagingSenderId: "771477218309",
+      appId: "1:771477218309:web:930d370b2f5be96a52686c"
+    };
