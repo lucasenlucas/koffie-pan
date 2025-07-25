@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Koffiecafé Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --clr-accent: #913737;
+        --clr-accent-light: #c94f4f;
+        --clr-text: #f9f9f9;
+        --clr-muted: #cccccc;
+        --radius: 12px;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: url('https://github.com/lucasenlucas/koffie-pan/blob/main/cdn/Ontwerp%20zonder%20titel-20.png?raw=true') no-repeat center center fixed;
+        background-size: cover;
+        color: var(--clr-text);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-section {
+        z-index: 1;
+      }
+
+      .login-box {
+        background: rgba(60, 26, 26, 0.9);
+        padding: 2.5rem;
+        border-radius: var(--radius);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        width: 320px;
+        text-align: center;
+        backdrop-filter: blur(8px);
+      }
+
+      .login-box h1 {
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+        color: var(--clr-accent-light);
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border-radius: var(--radius);
+        border: 1px solid #8b4a4a;
+        background-color: #1f0f0f;
+        color: var(--clr-text);
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 0.75rem;
+        font-weight: 600;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        background-color: var(--clr-accent);
+        color: #fff;
+        margin-bottom: 0.5rem;
+        transition: background 0.2s ease;
+      }
+
+      button:hover {
+        background-color: var(--clr-accent-light);
+      }
+
+      #status {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        color: var(--clr-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="login-section">
+      <div class="login-box">
+        <h1>Koffiecafé Paneel</h1>
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Wachtwoord" />
+        <button id="loginBtn">Inloggen</button>
+        <p id="status"></p>
+      </div>
+    </section>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        onAuthStateChanged
+      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDGH4Z_VPk4NiysBgjcx6UHyL2DpirL1ro",
+        authDomain: "koffie-server.firebaseapp.com",
+        projectId: "koffie-server",
+        storageBucket: "koffie-server.firebasestorage.app",
+        messagingSenderId: "771477218309",
+        appId: "1:771477218309:web:930d370b2f5be96a52686c"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const loginBtn = document.getElementById("loginBtn");
+      const status = document.getElementById("status");
+
+      loginBtn.onclick = async () => {
+        try {
+          await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+          status.textContent = "✅ Ingelogd! Je wordt doorgestuurd...";
+          setTimeout(() => (window.location.href = "/paneel.html"), 1500);
+        } catch (err) {
+          status.textContent = "❌ Fout bij inloggen: " + err.message;
+        }
+      };
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = "/paneel.html";
+        }
+      });
+    </script>
+  </body>
+</html>
